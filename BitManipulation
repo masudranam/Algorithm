@@ -1,0 +1,253 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+
+bool powOfTwo(int n){
+return (n && !(n&(n-1)));
+}
+
+int SetBitCount(int n){
+int cnt=0;
+while(n){
+        n=n&(n-1);
+cnt++;
+}
+return cnt;
+}
+
+bool checkIthBit(int i,int n){
+return (n&(1<<i));
+}
+
+void subSet(string s){
+int n=s.size();
+for(int i=0; i<(1<<n); i++){
+    for(int j=0;j<n; j++){
+        if(i&(1<<j))
+           cout<<s[j];
+    }
+   cout<<endl;
+}
+}
+
+int longestPowOfTwo(int n){
+for(int i=1; i<=8; i*=2)n=n|(n>>i);
+return ((n+1)>>1);
+}
+
+int rightMostSigBit(int n){
+    return (n^(n&(n-1)));
+    //return (n & ~(n-1));
+}
+
+int rightMostSigBit1(int n){
+return (n&(-n));
+}
+
+int addone(int x){
+// return (-(~x));
+//(~x)=-(x+1), (~)means 1's complement in binary.
+
+int m=1;
+while(x&m){
+   x=x|m;
+   m<<=1;
+}
+x|=m;
+return x;
+}
+
+bool singncheck(int x,int y){
+return ((x^y)<0);
+}
+
+int bitRotation(int x,int d){
+return ((x>>d)|(x<<(32-d)));
+}
+
+int kthbitoff(int n,int k){
+return (n& (~(1<<(k-1))));
+}
+
+int xorsum(int n){
+if(n%4==0)
+    return n;
+if(n%4==1)return 1;
+if(n%4==2)return n+1;
+return 0;
+}
+
+bool div2powM(int n,int m){
+if(n&((1<<m)-1)==0)
+    return true;
+return false;
+
+}
+
+int toggleOddBits(int n){
+int res=0,cnt=0;
+for(int i=n; i>0; i>>=1){
+    if(cnt%2==0){
+        res|=(1<<cnt);
+    }
+    cnt++;
+}
+return n^res;
+
+}
+
+int signCheeck(int n){
+return 1+(n>>31)-(-n>>31);
+//0->neg,1->zero,2->pos
+}
+
+int add(int x,int y){
+while(y!=0){
+    int carry=x&y;
+    x=x^y;
+    y=carry<<1;
+
+}
+return x;
+
+}
+
+int mul_10(int n){
+return ((n<<1)+(n<<3));
+}
+
+bool Allbit_set(int n){
+ if(n==0)return 0;
+ return ((n+1)&n==0);
+}
+
+bool AlternateBit(int n){
+int num=n^(n>>1);
+    return (((num+1)&num)==0);
+
+}
+
+int setBit_givenRange(int n,int l,int r){
+int range=(((1<<(l-1))-1)^((1<<r)-1));
+ return (n|range);
+}
+
+int msb(int n){
+for(int i=1; i<=16;i*=2){
+    n|=n>>i;
+}
+
+n+=1;
+return (n>>1);
+//return (1<<((int)(log2(n))-1));
+}
+
+int adjacentXor(int k){
+ if(!(k&1))return 2;
+ if(((k+1)&k)==0)return k/2;
+ return -1;
+}
+
+bool adjacentSetBit(int n){
+return (n&(n>>1));
+}
+
+int bitExtract(int n,int k,int p){
+return (((1<<k)-1)&(n>>(p-1)));
+}
+
+int kthlsb(int n,int k){
+return ((n&(1<<(k-1)))!=0);
+
+}
+
+bool divisible4(int n){
+return ((n&3)==0);
+}
+
+int swapNbits(int x,int p1,int p2,int n){
+int s1=((x>>p1)&((1<<n)-1));
+int s2=((x>>p2)&((1<<n)-1));
+int xr=(s1^s2);
+xr=(xr<<p1)|(xr<<p2);
+return x^xr;
+}
+
+int Min(int x,int y){
+    return y^((x^y)&-(x<y));
+    //(x+y-abs(x-y))/2 ;
+
+}
+
+int Max(int x,int y){
+return y^((x^y)&-(x>y));
+//(x+y+abs(x-y))/2;
+}
+
+int Min3(int x,int y,int z){
+if(!(y/x))
+    return (!(y/z))?y:z;
+return (!(x/z))?x: z;
+}
+
+int Abs(int n){
+int mask=n>>31;
+return (mask+n)^mask;
+//return (~n+1);
+}
+
+int getParity(int n){
+int p=0;
+while(n){
+    p=!p;
+    n=n&(n-1);
+}return p;
+}
+
+int swapEvenOddBits(int n){
+int even=n&0xAAAAAAAA;//all even set bits
+int odd=n&0x55555555;//all odd set bits
+even>>=1;
+odd<<=1;
+return (even|odd);
+}
+
+int setEvenBit(int n){
+ int res=0,cnt=0;
+ for(int i=n;i>0;i>>=1){
+    if(cnt&1)res|=(1<<cnt);
+    cnt++;
+ }
+ return (n|res);
+}
+
+int setAllBit(int n){
+for(int i=1;i<=16;i*=2)
+    n|=(n>>i);
+    return n;
+}
+
+void multipleOf4(int n){
+for(int i=0;i<=n;i++){
+    if(!(i&1) && !((i>>1)&1))cout<<i<<" ";
+   // if(((n>>2)<<2)==n) cout<<i<<" ";
+}
+}
+
+int bitChangeGivenPos(int n,int p1,int p2){
+int b1=((n>>p1)&1),b2=((n>>p2)&1);
+int x=(b1^b2);
+x=(x<<p1)|(x<<p2);
+return n^x;
+}
+
+int baseChange(int n,int base){
+if(n<base)return n;
+return n%base +10*(baseChange(n/base,base));
+}
+
+
+int main(){
+cout<< bitChangeGivenPos(28,0,3);
+  return 0;
+}
