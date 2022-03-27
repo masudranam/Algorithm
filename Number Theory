@@ -1,0 +1,411 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define ll long long
+#define debug(x) cout<<#x<<x<<endl
+const int M=1e9+7;
+const int N=1e3;
+
+vector<int>seive1(){
+ vector<int> pfs;
+ int lpf[N+1]={0};
+
+     for(int i=2; i<=N; i++){
+       // debug(i);
+        if(!lpf[i]){
+              pfs.push_back(i);
+            lpf[i]=i;
+        }
+
+  for(int j=0;j<pfs.size() && pfs[j]<=lpf[i]&& i*pfs[j]<=N; j++){
+           // debug(j);
+            lpf[i*pfs[j]]=pfs[j];
+        }
+    }
+    return pfs;
+}
+
+vector<int> sieve() {
+vector<int> prime;
+bool mark[N]={0};
+    for (int i=3; i*i<=N; i+=2) {
+        if (mark[i]==false) {
+            for (int j=i+i; j<N; j+=i) {
+                mark[j]=true;
+            }
+        }
+    }
+    prime.push_back (2);
+    for (int i=3; i<N; i+=2)
+        if (mark[i]==false)
+            prime.push_back (i);
+    return prime;
+}
+
+vector<int> segSieve(ll l,ll r){
+bool isPrime[r-l+1];
+vector<int>prime=sieve(),p;
+for(auto &a:isPrime)a=true;
+
+for(int i=0; prime[i]*prime[i]<=r; i++){
+    int cp=prime[i];
+    ll base=(l/cp)*cp;
+    if(base<cp)base+=cp;
+    for(ll j=base; j<=r; j+=cp){
+      isPrime[j-l]=false;
+    }
+    if(base==cp)isPrime[base-l]=true;
+}
+for(int i=0; i<r-l+1; i++){
+    if(isPrime[i]==true)p.push_back(i+l);
+}
+return p;
+}
+
+
+bool Prime(int n){
+if(n<=1)return false;
+if(n<=3)return true;
+if(n%2==0 || n%3==0)return false;
+for(int i=5; i*i<=n; i+=6){
+    if(n%i==0 || n%(i+2)==0)
+        return false;
+}
+return true;
+}
+
+int  divisor(int n){
+    int ans=1;
+   for(int i=2; i*i<=n; i++){
+        int cnt=0;
+    while(n%i==0)
+        n/=i,cnt++;
+   ans=ans*(cnt+1);
+   }
+   if(n>1)ans*=2;
+ return ans;
+}
+
+int divisor_sum(int n){
+int res=1;
+for(int i=2;i*i<=n;i++){
+    int curr_sum=1,curr_term=1;
+    while(n%i==0){
+        n/=i;
+        curr_term*=i;
+        curr_sum+=curr_term;
+    }
+    res*=curr_sum;
+}
+if(n>1)res*=(1+n);
+return res;
+
+}
+
+ll binpow(ll a,ll n,ll mod){
+ll res=1;
+while(n){
+   if(n&1)res=res*a%mod;
+   res=res*res%mod;
+    n>>=1;
+}return res%mod;
+}
+
+ll gcd(ll a,ll b){
+return b?gcd(b,a%b):a;
+}
+
+ll gcdext(ll a,ll b,ll& x,ll& y){
+    if(!b){
+    x=1,y=0;
+    return a;
+    }
+ll x1,y1;
+ll d=gcdext(b,a%b,x1,y1);
+x=y1;
+y=x1-y1*(a/b);
+return d;
+
+}
+
+ll modinv(ll a,ll m){
+    ll x,y;
+ll g=gcdext(a,m,x,y);
+if(g!=1)return -1;
+
+return (x%m+m)%m;
+
+}
+
+int nCr(int n,int r){
+int ans=1;
+if(r>n/2)r=n-r;
+for(int i=1;i<=r;i++){
+    ans*=n;
+    ans/=i;
+    n--;
+}
+return ans;
+}
+
+ll lcm(ll a,ll b){
+return a/gcd(a,b)*b;
+}
+
+ll ldfe(ll a,ll b,ll c,ll &x,ll y,ll &g){
+g=gcd(abs(a),abs(b));
+if(c%g)return false;
+x*=c/g;
+y*=c/g;
+if(a<0)x=-x;
+if(b<0)y=-y;
+return false;
+}
+
+pair<int,int> fib(int n){
+if(!n){
+    return {0,1};
+}
+auto p=fib(n>>1);
+int c=p.first*(2*p.second-p.first);
+int d=p.first*p.first+p.second*p.second;
+if(n&1)
+return {d,c+d};
+else return {c,d};
+    }
+
+int phi(int n){
+//relatively coprime 1 to n  sqrt(n)
+int res=n;
+for(int i=2; i*i<=n; i++){
+    if(n%i==0){
+        while(n%i==0)
+            n/=i;
+        res-=res/i;
+    }
+}
+if(n>1)res-=res/n;
+return res;
+}
+
+void phi_1_to_n(int n){
+    // n*loglog(n) based on sieve
+  vector<int> phi(n+1);
+  for(int i=0; i<=n; i++)
+    phi[i]=i;
+  for(int i=2; i<=n; i++){
+    if(phi[i]==i){
+        for(int j=i;j<=n;j+=i)
+            phi[j]-=phi[j]/i;
+    }
+  }
+}
+
+void phi_1_to_n1(int n){
+    // n*log(n)
+    vector<int> phi(n+1);
+    phi[0]=0;phi[1]=1;
+
+    for(int i=2; i<=n; i++)
+        phi[i]=i-1;
+    for(int i=2; i<=n; i++){
+        for(int j=i*2;j<=n; j+=i)
+            phi[j]-=phi[i];
+    }
+}
+
+void gcd_sum_up_to_n(int n){
+vector<int> phi(n+1),res(n+1,0);
+for(int i=0; i<=n; i++)
+    phi[i]=i;
+
+for(int i=2;i<=n; i++){
+   if(phi[i]==i){
+    for(int j=i;j<=n;j+=i)
+        phi[j]-=phi[j]/i;
+   }
+}
+
+   for(int i=1;i<=n; i++){
+    for(int j=2;i*j<=n;j++){
+        res[i*j]+=i*phi[j];
+    }
+   }
+
+   for(int i=2;i<=n;i++)
+    res[i]+=res[i-1];
+    cout<<res[n]<<endl;
+}
+
+int lcm_1_to_n(int a,int b){
+  //a==n,b==n-1
+  if(b==1)return a;
+  a=(a*b)/__gcd(a,b);
+  b-=1;
+       return lcm_1_to_n(a,b);
+}
+
+int mxPrimeSum(int n){
+int prime[n+1]={0};
+for(int i=2;i<=n/2;i++){
+    if(prime[i]==0){
+            prime[i]=i;
+        for(int p=i*2;p<=n;p+=i)
+            prime[p]=i;
+    }
+
+}
+int sum=0;
+for(int i=1;i<=n;i++)
+    sum+=prime[i];
+
+  return sum;
+}
+
+int divSum_1_to_n(int n){
+int sum=0;
+for(int i=1;i<=n;i++){
+    sum+=i*(n/i);
+}
+return sum;
+}
+
+
+//segment  tree
+ int arr[N];
+ int tree[N*3];
+ void init(int node,int b,int e){
+ if(b==e){
+    tree[node]=arr[b];
+    return;
+ }
+ int left=node*2;
+ int right=node*2+1;
+ int mid=(b+e)/2;
+ init(left,b,mid);
+ init(right,mid+1,e);
+ tree[node]=tree[left]+tree[right];
+ }
+
+ int query(int node,int b,int e,int i,int j){
+ if(i>e || b>j)
+    return 0;
+ if(b>=i && e<=j)
+    return tree[node];
+ int left=node*2;
+ int right=node*2+1;
+ int mid=(b+e)/2;
+ int p1=query(left,b,mid,i,j);
+ int p2=query(right,mid+1,e,i,j);
+ return p1+p2;
+ }
+
+void update(int node,int b,int e,int i,int j,int newValue){
+ if(i>e || b>j)
+    return;
+ if(b>=i && e<=j)
+     tree[node]=newValue;
+ int left=node*2;
+ int right=node*2+1;
+ int mid=(b+e)/2;
+ update(left,b,mid,i,j,newValue);
+ update(right,mid+1,e,i,j,newValue);
+ tree[node]=tree[left]+tree[right];
+ }
+
+
+
+struct node{
+int mn,s,mx;
+}st[1<<19];
+int n,q;
+
+void upd(int l1,int x,int i=1,int l2=0,int r2=n-1){
+  if(l2==r2){
+    st[i].mn=x;
+    st[i].s=x;
+    st[i].mx=x;
+    return;
+  }
+  int m2=(l2+r2)/2;
+  if(l1<=m2)
+    upd(l1,x,2*i,l2,m2);
+  else upd(l1,x,2*i+1,m2+1,r2);
+
+  st[i].mn=min(st[2*i].mn,st[2*i+1].mn);
+  st[i].mx=max(st[2*i].mx,st[2*i+1].mx);
+  st[i].s=st[2*i].s+st[2*i+1].s;
+}
+
+int qry(int l1,int r1,int i=1,int l2=0,int r2=n-1){
+if(l2>=l1&&r2<=r1){
+    //return st[i].mn;
+    //return st[i].mx;
+    return st[i].s;
+}
+    int m2=(l2+r2)/2;
+//return min((l1<=m2?qry(l1,r1,2*i,l2,m2):1e9),(m2<r1?qry(l1,r1,2*i+1,m2+1,r2):1e9));
+//return max((l1<=m2?qry(l1,r1,2*i,l2,m2):-1e9),(m2<r1?qry(l1,r1,2*i+1,m2+1,r2):-1e9));
+return ((l1<=m2?qry(l1,r1,2*i,l2,m2):0)+(m2<r1?qry(l1,r1,2*i+1,m2+1,r2):0));
+}
+
+
+ /*
+ struct node{
+int mn,s,lz;
+}st[1<<19];
+ int n,q,x[N];
+
+void app(int i,int x,int l2,int r2){
+st[i].mn+=x;
+st[i].s+=x*(r2-l2+1);
+st[i].lz+=x;
+}
+
+void psh(int i,int l2,int m2,int r2){
+app(2*i,st[i].lz,l2,m2);
+app(2*i+1,st[i].lz,m2+1,r2);
+st[i].lz=0;
+}
+
+void upd(int l1,int x,int i=1,int l2=0,int r2=n-1){
+if(l2==r2){
+    st[i].mn=x;
+    st[i].s=x;
+    return;
+}
+int m2=(l2+r2)/2;
+psh(i,l2,m2,r2);
+if(l1<=m2)
+    upd(l1,x,2*i,l2,m2);
+else upd(l1,x,2*i+1,m2+1,r2);
+st[i].mn=min(st[2*i].mn,st[2*i+1].mn);
+st[i].s=st[2*i].s+st[2*i+1].s;
+}
+
+void upd2(int l1,int r1,int x,int i=1,int l2=0,int r2=n-1){
+if(l1<=l2&&r2<=r1){
+    app(i,x,l2,r2);
+    return;
+}
+int m2=(l2+r2)/2;
+psh(i,l2,m2,r2);
+if(l1<=m2)upd2(l1,r1,x,2*i,l2,m2);
+if(m2<r1)upd2(l1,r1,x,2*i+1,m2+1,r2);
+st[i].mn=min(st[2*i].mn,st[2*i+1].mn);
+st[i].s=st[2*i].s+st[2*i+1].s;
+}
+
+int qry(int l1,int r1,int i=1,int l2=0,int r2=n-1){
+if(l1<=l2&&r2<=r1)return st[i].s;
+int m2=(l2+r2)/2;
+psh(i,l2,m2,r2);
+return (l1<=m2?qry(l1,r1,2*i,l2,m2):0)+(m2<r1?qry(l1,r1,2*i+1,m2+1,r2):0);
+}
+*/
+
+
+
+main(void){
+
+}
