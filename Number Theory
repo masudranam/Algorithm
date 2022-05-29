@@ -405,6 +405,46 @@ return (l1<=m2?qry(l1,r1,2*i,l2,m2):0)+(m2<r1?qry(l1,r1,2*i+1,m2+1,r2):0);
 */
 
 
+/*
+void mul(int F[2][2],int M[2][2]){
+ int x = F[0][0] * M[0][0] + F[0][1] * M[1][0];
+    int y = F[0][0] * M[0][1] + F[0][1] * M[1][1];
+    int z = F[1][0] * M[0][0] + F[1][1] * M[1][0];
+    int w = F[1][0] * M[0][1] + F[1][1] * M[1][1];
+
+    F[0][0] = x;
+    F[0][1] = y;
+    F[1][0] = z;
+    F[1][1] = w;
+}
+void pw(int f[2][2],int n){
+if(n<=1)return;
+int m[2][2]={{1,1},{1,0}};
+pw(f,n/2);
+mul(f,f);
+if(n%2)mul(f,m);
+}
+
+int fib(int n){
+int f[2][2]={{1,1},{1,0}};
+if(n==0)return 0;
+pw(f,n-1);
+return f[0][0];
+}
+*/
+
+int f[N];
+void fact(){
+f[0]=1;
+for(int i=1;i<N;i++)
+    f[i]=i*f[i-1]%M;
+}
+ll ncr(int n,int r){
+return (f[n]*1ll*pw(f[n-r],M-2,M)%M*1ll*pw(f[r],M-2,M)%M)%M;
+}
+
+
+
 
 main(void){
 
