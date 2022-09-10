@@ -1,1 +1,16 @@
+// 2D point representaion 
+
+struct point{
+    int x,y;
+    point(){}
+   point(const int &x,const int &y):x(x),y(y){}
+   point& operator +=(const point &t){x+=t.x,y+=t.y;return *this;}
+   point& operator -=(const point &t){x-=t.x,y-=t.y;return *this;}
+   point operator /=(const point &t){x/=t.x,y/=t.y;return *this;}
+   point operator *=(const point &t){x*=t.x,y*=t.y;return *this;}
+};
+
+
+
+
 
