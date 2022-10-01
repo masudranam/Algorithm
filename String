@@ -85,3 +85,81 @@ for(int i=0;i<n;i++)cout<<ans[i]<<endl;
 
 }
 }
+
+//Z algorithm
+
+vector<int> z_function(string s) {
+    int n = (int) s.length();
+    vector<int> z(n);
+    int l = 0, r = 0;
+    for (int i = 1; i < n; ++i) {
+        if (i <= r)
+            z[i] = min (r - i + 1, z[i - l]);
+        while (i + z[i] < n && s[z[i]] == s[i + z[i]])
+            ++z[i];
+        if (i + z[i] - 1 > r)
+            l = i, r = i + z[i] - 1;
+    }
+    return z;
+}
+
+//Trie algorithm
+int trie[N][26],node,isEnd[N];
+
+void ins(string s){
+    int cur=0;
+    for(auto c:s){
+        if(!trie[cur][c-'a'])trie[cur][c-'a']=++node;
+        cur=trie[cur][c-'a'];
+    }
+    isEnd[cur]++;
+}
+
+bool Remove(string s){
+int cur=0;
+for(auto c:s){
+    if(!trie[cur][c-'a'])return false;
+    cur=trie[cur][c-'a'];
+}
+
+if(!isEnd[cur])return false;
+isEnd[cur]--;
+return true;
+}
+
+bool Search(string s){
+int cur=0;
+for(auto c:s){
+    if(!trie[cur][c-'a'])return false;
+    cur=trie[cur][c-'a'];
+}
+return isEnd[cur];
+}
+
+//Manacher's Algorithm
+vector<int> pal_array(string s)
+{
+    string t=s;
+    s="#";
+    for(auto c:t)s+=c,s+="#";
+    s="@"+s+"$";
+    int n = s.size();
+    vector<int> len(n + 1);
+    int l = 1, r = 1;
+    for(int i = 1; i <= n; i++)
+    {
+        len[i] = min(r - i, len[l + (r - i)]);
+        while(s[i - len[i]] == s[i + len[i]])
+            len[i]++;
+        if(i + len[i] > r)
+        {
+            l = i - len[i];
+            r = i + len[i];
+        }
+    }
+   
+return len;
+}
+
+
+
