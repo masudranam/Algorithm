@@ -1,0 +1,57 @@
+
+vector<int> sieve1() {
+vector<int> prime;
+bool mark[N]={0};
+    for (int i=3; i*i<=N; i+=2) {
+        if (mark[i]==false) {
+            for (int j=i+i; j<N; j+=i) {
+                mark[j]=true;
+            }
+        }
+    }
+    prime.push_back (2);
+    for (int i=3; i<N; i+=2)
+        if (mark[i]==false)
+            prime.push_back (i);
+    return prime;
+}
+
+//Sieve 
+vector<int>seive(int N){
+    vector<int>pfs,lpf(N,0);
+     for(int i=2; i<N; i++){
+        if(!lpf[i]){
+            pfs.push_back(i);
+            lpf[i]=i;
+        }
+
+  for(int j=0; j<pfs.size() && pfs[j]<=lpf[i] && i*pfs[j] <N; j++){
+            lpf[i*pfs[j]]=pfs[j];
+        }
+    }
+    return pfs;
+}
+
+//segment sieve
+vector<int> segSieve(int l,int r){
+bool isPrime[r-l+1];
+vector<int>prime=seive(r-l+10),p;
+
+for(auto &a:isPrime)a=true;
+
+for(int i=0; prime[i]*prime[i]<=r; i++){
+    int cp=prime[i];
+    int base=(l/cp)*cp;
+    if(base<cp)base+=cp;
+    for(int j=base; j<=r; j+=cp){
+      isPrime[j-l]=false;
+    }
+    if(base==cp)isPrime[base-l]=true;
+}
+for(int i=0; i<r-l+1; i++){
+    if(i+l>=2 && isPrime[i]==true)p.push_back(i+l);
+}
+return p;
+}
+
+
