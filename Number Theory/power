@@ -22,8 +22,20 @@ int mul(int a, int b, int M){
     return res;
 }
 
+//Two digit string multiplication
+string mul(string a,string b,int base){
 
+string ans=string(sz(a)+sz(b),'0');
 
+for(int i=sz(a)-1;i>=0;i--){
+    for(int j=sz(b)-1;j>=0;j--){
+        int res=(ans[i+j+1]-'0')+(a[i]-'0')*(b[j]-'0');
+        ans[i+j+1]=(res%base)+'0';
+        ans[i+j]+=res/base;
+    }
+}
+return ans;
+}
 
 
 
