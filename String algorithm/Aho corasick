@@ -1,0 +1,110 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+//Aho corasic
+const int M=1e9+7;
+const int N=500*500+10;
+
+bitset<505>out[N];
+int f[N],g[N][26];
+
+//prefix function
+vector<int> prefix_function(string s) {
+    int n = (int)s.length();
+    vector<int> pi(n);
+    for (int i = 1; i < n; i++) {
+        int j = pi[i-1];
+        while (j > 0 && s[i] != s[j])
+            j = pi[j-1];
+        if (s[i] == s[j])
+            j++;
+        pi[i] = j;
+    }
+    return pi;
+}
+
+int buildMatching(const vector<string>& word){
+    memset(out, 0, sizeof(out));
+    memset(f, -1, sizeof(f));
+    memset(g, -1, sizeof g);
+int state=0;
+for(int i=0;i<sz(word);i++){
+    const string key=word[i];
+    int cur=0;
+    for(auto c:key){
+        if(g[cur][c-'a']==-1)g[cur][c-'a']=++state;
+        cur=g[cur][c-'a'];
+    }
+    out[cur][i]=1;
+}
+
+queue<int>q;
+for(int c=0;c<26;c++){
+    if(g[0][c]==-1){
+        g[0][c]=0;
+    }
+}
+
+for(int i=0;i<26;i++){
+    if(g[0][i]>0){
+        f[g[0][i]]=0;
+        q.push(g[0][i]);
+    }
+}
+
+while(sz(q)){
+state=q.front();q.pop();
+for(int c=0;c<26;c++){
+    if(g[state][c]!=-1){
+        int failure=f[state];
+        while(g[failure][c]==-1){
+            failure=f[failure];
+        }
+        failure=g[failure][c];
+        f[g[state][c]]=failure;
+        out[g[state][c]] |=out[failure];
+        q.push(g[state][c]);
+    }
+}
+}
+return state;
+}
+
+int findNextState(int cur,char nxtChar){
+    int state=cur;
+    int c=nxtChar-'a';
+    while(g[state][c]==-1)state=f[state];
+    return g[state][c];
+}
+
+int ans[505];
+
+void solve(){
+    int tt;cin>>tt;
+    for(int tc=1;tc<=tt;tc++){
+int n;string t;cin>>n>>t;
+vector<string>s(n);
+for(auto &x:s)cin>>x;
+for(int i=0;i<=n;i++)ans[i]=0;
+buildMatching(s);
+
+int cur=0;
+
+for(int i=0;i<sz(t);i++){
+cur=findNextState(cur,t[i]);
+if(out[cur]==0)continue;
+for(int j=0;j<sz(s);j++){
+    if(out[cur][j])ans[j]++;
+}
+
+}
+cout<<"Case "<<tc<<":\n";
+for(int i=0;i<n;i++)cout<<ans[i]<<endl;
+
+}
+}
+
+int main(){
+
+return 0;
+}
