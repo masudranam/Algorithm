@@ -1,0 +1,107 @@
+#include<iostream>
+using namespace std;
+
+void add(int *a,int b[],int n){
+int carry=0;
+for(int i=n;i>=0;i--){
+    a[i]=(a[i]+b[i]+carry);
+    if(a[i]>1){
+        a[i]%=2;
+        carry=1;
+    }else{
+    carry=0;
+    }
+}
+}
+
+void complement(int *a,int n){
+int x[n+1]={0};
+x[n-1]=1;
+for(int i=n-1;i>=0;i--){
+    a[i]=(a[i]+1)%2;
+}
+add(a,x,n);
+}
+
+void asr(int *a,int *b,int n,int m){
+    for(int i=m-1;i>0;i--){
+    b[i]=b[i-1];
+    }
+    b[0]=a[n-1];
+    for(int i=n-1;i>0;i--)a[i]=a[i-1];
+}
+
+void show(int *a,int *b,int n,int m){
+for(int i=0;i<n;i++)cout<<a[i];
+cout<<"\t\t";
+for(int i=0;i<m;i++)cout<<b[i];
+
+}
+
+
+
+int main(){
+int ac[32]={0},br[32]={0},qr[32]={0},negbr[32]={0},carry=0;
+
+int n;
+cout<<"Enter the number of multiplicant bits: ";
+cin>>n;
+
+
+cout<<"Enter multiplicant: \n";
+for(int i=0;i<n;i++)cin>>br[i];
+cout<<"Ener number of multiplier bits:\n";
+int m;cin>>m;
+cout<<"Enter multiplier :\n";
+for(int i=0;i<m;i++)cin>>qr[i];
+for(int i=0;i<n;i++)negbr[i]=br[i];
+complement(negbr,n);
+
+cout <<"step  action     AC\t\tQR\t\tqn\tq[n+1]\n";
+cout <<m<<"     initial\t";
+    for(int i=0;i<n;i++)cout<<'0';
+    cout<<"\t\t";
+    for(int i=0;i<m;i++)cout<<qr[i];
+
+cout<<"\t\t"<<qr[m-1]<<"\t 0"<<endl;
+
+
+
+
+for(int i=m-1;i>=0;i--){
+
+if(carry+qr[m-1]==1){
+  if(carry==1){
+    add(ac,br,n);
+    carry=qr[m-1];
+    asr(ac,qr,n,m);
+
+cout<<i<<"     adding\t";
+show(ac,qr,n,m);
+cout<<"\t\t"<<qr[m-1]<<"\t "<<carry<<endl;
+  }else{
+add(ac,negbr,n);
+carry=qr[m-1];
+ asr(ac,qr,n,m);
+
+cout<<i<<"     sbstrct\t";
+show(ac,qr,n,m);
+cout<<"\t\t"<<qr[m-1]<<"\t "<<carry<<endl;
+  }
+
+}else{
+carry=qr[m-1];
+asr(ac,qr,n,m);
+cout<<i<<"     shifting\t";
+show(ac,qr,n,m);
+cout<<"\t\t"<<qr[m-1]<<"\t "<<carry<<endl;
+}
+}
+
+
+cout<<"Answer is: ";
+for(int i=0;i<n;i++)cout<<ac[i];cout<<" ";
+for(int i=0;i<m;i++)cout<<qr[i];cout<<endl;
+
+return 0;
+}
