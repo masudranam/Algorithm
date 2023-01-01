@@ -1,3 +1,6 @@
+#include<bits/stdc++.h>
+using namespace std;
+
 //BigMod
 int pw(int a, int b,int M){
     int res = 1;
@@ -38,6 +41,11 @@ return ans;
 }
 
 
+int main(){
+
+
+return 0;
+}
 
 
 
