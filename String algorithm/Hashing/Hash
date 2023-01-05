@@ -1,0 +1,78 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define print(a) for(auto x:a)cout<<x<<" "
+#define debug(x) cout<<#x<<" "<<x<<endl
+#define all(a) (a).begin(),(a).end()
+#define sz(a) (int)(a.size())
+#define int   long long int
+#define endl '\n'
+#define ar array
+ 
+const int M=1e9+7;
+const int N=5e6+10;
+ 
+int pw[N],pw1[N],h11[N],h12[N],h21[N],h22[N];
+int p=397,p1=101;
+//double
+bool pallindrome(int l, int r){
+    int H11 = (h11[r]-h11[l-1]+M)%M;
+    int H12 = (h12[r]-pw[r-l+1]*h12[l-1])%M;
+    H12 = (pw[l-1]*(H12+M))%M;
+    //debug(H1);debug(H2);
+    int H21=(h21[r]-h21[l-1]+M)%M;
+    int H22=(h22[r]-pw1[r-l+1]*h22[l-1])%M;
+    H22=(pw1[l-1]*(H22+M))%M;
+    return H11==H12 && H21==H22;
+}
+
+
+//cheeck two substring equal 
+bool subStr(int i1, int j1, int i2, int j2){
+	if(j1-i1 != j2-i2)return false;
+    int H1 = (h1[j1]-h1[i1-1]+M)%M;
+    int H2 = (h2[j2]-h2[i2-1]+M)%M;
+    H1 = (pw[i2-1]*H1)%M;  
+    H2 = (pw[i1-1]*H2)%M;
+    return (H1==H2);
+}
+ 
+bool pal(int i1,int j1, int i2, int j2){
+	if(j1-i1 != j2-i2) return false;
+     int H1 = (h1[j1]-h1[i1-1]+M)%M;
+     int H2 = (h2[j2]-(pw[j2-i2+1]*h2[i2-1]))%M;
+     H2 = (pw[i1-1]*(H2+M))%M;
+     return H1==H2;
+}
+
+
+ 
+void solve(){
+
+   pw[0]=1;
+   for(int i=1; i<N; i++){
+    pw[i] = (pw[i-1]*p)%M;
+   }
+    pw1[0]=1;
+    for(int i=1;i<N;i++){
+    pw1[i] = (pw1[i-1]*p1)%M;
+   }
+    for(int i=0;i<sz(s); i++){
+    h1[i+1] = (h1[i]+pw[i]*(s[i]-'a'+1))%M;
+    h2[i+1] = (h2[i]*p+(s[i]-'a'+1))%M;
+   }
+    for(int i=0;i<sz(s);i++){
+    h21[i+1] = (h21[i]+pw1[i]*s[i])%M;
+    h22[i+1] = (h22[i]*p1+s[i])%M;
+}
+ 
+}
+ 
+signed main(){
+ios_base::sync_with_stdio(false);cin.tie(NULL);
+//freopen("input.txt","r",stdin);
+//freopen("output.txt","w",stdout);
+ 
+int t=1;   //cin>>t;
+ 
+while(t--)solve();
+return 0;}
