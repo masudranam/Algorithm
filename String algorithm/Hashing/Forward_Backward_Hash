@@ -1,0 +1,73 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define print(a) for(auto x:a)cout<<x<<" "
+#define debug(x) cout<<#x<<" "<<x<<endl
+#define all(a) (a).begin(),(a).end()
+#define sz(a) (int)(a.size())
+#define int   long long int
+#define endl '\n'
+#define ar array
+ 
+const int M=1e9+7;
+const int N=1e6+10;
+
+string s;
+const int p = 397;
+int pw[N],hF[N],hR[N],len,n;
+
+void Calc(){
+    len=sz(s);
+    hF[0] = hR[len+1] = 0;
+    for(int i=0; i<len; i++){
+        hF[i+1] = (hF[i] * p + (s[i] - 'a' + 1) ) % M;
+        hR[len-i] = (hR[len-i+1] * p + (s[len-i-1] - 'a' + 1)) % M;
+    }
+}
+
+int hashF(int l,int r){
+   int val = hF[r] - (hF[l - 1] * pw[r - l + 1]) % M;
+    if(val<0)val+=M;
+    return val;
+}
+
+int hashR(int l,int r){
+    int val = hR[l] - (hR[r + 1] * pw[r - l + 1]) % M;
+    if(val<0)val+=M;
+    return val;
+}
+
+bool ispalin(int l,int r){
+    if(r<l)return false;
+    return (hashF(l, r) == hashR(l, r));
+}
+
+string f(){
+for(int i=sz(s);i>0;i--)
+if(ispalin(1,i))return s.substr(0,i);
+}
+ 
+string f1(){
+   for(int i=1;i<=sz(s);i++)
+   if(ispalin(i,sz(s)))return s.substr(i-1);
+}
+ 
+
+ 
+ 
+void solve(){
+pw[0]=1;
+for(int i=1; i<N; i++){
+    pw[i] = (pw[i-1]*p)%M;
+}
+
+ 
+}
+signed main(){
+ios_base::sync_with_stdio(false);cin.tie(NULL);
+//freopen("input.txt","r",stdin);
+//freopen("output.txt","w",stdout);
+ 
+int t=1;   //cin>>t;
+ 
+while(t--)solve();
+return 0;}
