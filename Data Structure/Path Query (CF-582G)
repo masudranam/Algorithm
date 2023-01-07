@@ -1,0 +1,83 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define print(a) for(auto x:a)cout<<x<<" "
+#define debug(x) cout<<#x<<" "<<x<<endl
+#define all(a) (a).begin(),(a).end()
+#define sz(a) (int)(a.size())
+#define int   long long int
+#define endl '\n'
+#define ar array
+ 
+const int M=1e9+7;
+const int N=5e6+10;
+ 
+int p[N];
+int Size[N],res;
+ 
+int get(int v){
+    return p[v] = (v==p[v]?v:get(p[v]));
+}
+int c(int x){
+  return x*(x-1)/2;
+}
+ 
+void merge(int u, int v){
+    u = get(u);
+    v = get(v);
+    if(Size[u] < Size[v])swap(u,v);
+    //res -= c(Size[u]);
+   // res -= c(Size[v]);
+   res += Size[u]*Size[v];
+    Size[u] += Size[v];
+   // res += c(Size[u]);
+    p[v] = u;
+}
+ 
+void solve(){
+int n, m;
+cin >> n >> m;
+n--;
+vector<ar<int,3>> g(n);
+ 
+for(int i=0;i<n;i++){
+  cin>>g[i][1]>>g[i][2]>>g[i][0];
+}
+vector<ar<int,2>>q(m);
+ 
+for(int i=0; i<m; i++){
+  cin>>q[i][0];
+  q[i][1] = i;
+}
+ 
+sort(all(q)); 
+sort(all(g));
+ 
+for(int i=1; i<=n+1; i++){
+  p[i] = i;
+  Size[i] = 1;
+}
+ 
+vector<int> ans(m);
+ 
+int pos=0;
+for(int i=0; i<m; i++){
+  while(pos<n && g[pos][0]<=q[i][0]){
+    merge(g[pos][1],g[pos][2]);
+    pos++;
+  }
+  ans[q[i][1]] = res;
+}
+ 
+for(int i=0; i<m; i++){
+  cout<<ans[i]<<" ";
+}
+ 
+}
+ 
+signed main(){
+ios_base::sync_with_stdio(false);cin.tie(NULL);
+ 
+int t=1;   //cin>>t;
+ 
+while(t--)solve();
+return 0;}
