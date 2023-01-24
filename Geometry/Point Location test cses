@@ -1,0 +1,51 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define print(a) for(auto x:a)cout<<x<<" "
+#define debug(x) cout<<#x<<" "<<x<<endl
+#define all(a) (a).begin(),(a).end()
+#define sz(a) (int)(a.size())
+#define int   long long int
+#define endl '\n'
+#define ar array
+
+const int M = 1e9 + 7;
+const int N = 2e6 + 10;
+
+
+struct Point {
+    int x, y;
+    void read(){ cin>>x>>y; }
+    Point operator +(const Point& b) const { return Point{x+b.x, y+b.y}; }
+    Point operator -(const Point& b) const { return Point{x-b.x, y-b.y}; }
+    int operator *(const Point& b) const { return  x * b.y -  y * b.x; }
+    void operator +=(const Point& b) { x += b.x; y += b.y; }
+    void operator -=(const Point &b) { x -= b.x; y -= b.y; }
+    void operator *=(const int k) { x *= k; y *= k; }
+
+    int cross(const Point& b, const Point& c) const {
+        return (b - *this) * (c - *this);
+    }
+};
+
+Point p[3];
+void solve() {
+	 
+
+	for(int i=0;i<3;i++)p[i].read();
+	
+	int res=p[0].cross(p[1],p[2]);
+	if(res==0)cout<<"TOUCH\n";
+	else if(res>0)cout<<"LEFT\n";
+	else cout<<"RIGHT\n";
+}
+
+
+signed main() {
+  ios_base::sync_with_stdio (0);
+  cin.tie (0);
+  
+  int t = 1; cin>>t;
+  while (t--) solve();
+  return 0;
+}
