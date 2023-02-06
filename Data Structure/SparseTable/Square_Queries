@@ -1,0 +1,60 @@
+#include<bits/stdc++.h>
+using namespace std;
+ 
+#define print(a) for(auto x:a)cout<<x<<" ";cout<<'\n';
+#define debug(x) cout<<#x<<" "<<x<<endl
+#define all(a) (a).begin(),(a).end()
+#define sz(a) (int)(a.size())
+#define int   long long int
+#define endl '\n'
+#define ar array
+ 
+const int M = 1e9 + 7;
+const int N = 2e5+10;
+const int LOG = 12;
+int mx[505][505][12];
+
+int qry(int l, int r,int x){
+    int k=0;
+    while((1<<(k+1))<=x)k++;
+    return max(max(mx[l][r][k],mx[l+x-(1<<k)][r][k]),max(mx[l][r+x-(1<<k)][k],mx[l+x-(1<<k)][r+x-(1<<k)][k]));
+}
+
+void solve(){
+int n,q; cin>>n>>q;
+ for(int i=0; i<n; i++){
+     for(int j=0;j<n;j++){
+         int x;cin>>x;
+         mx[i][j][0]=x;
+     }
+ }
+
+for(int k=1; k<LOG; k++){
+    for(int i=0; i+(1<<k)-1<n; i++){
+        for(int j=0;j+(1<<k)-1<n;j++){
+            int x=(1<<(k-1));
+            mx[i][j][k]=max(max(mx[i][j][k-1],mx[i+x][j][k-1]),max(mx[i][j+x][k-1],mx[i+x][j+x][k-1]));
+        }
+    }
+}
+
+
+while(q--){
+    int l, r,s;
+    cin>>l>>r>>s;
+    l--,r--;
+    cout<<qry(l,r,s)<<endl;
+}
+
+}
+
+
+signed main(){
+ios_base::sync_with_stdio(0);cin.tie(0);
+
+int t=1;   cin>>t;
+for(int tc=1;tc<=t;tc++){
+    cout<<"Case "<<tc<<": \n";solve();
+}
+//while(t--)solve();
+return 0;}
