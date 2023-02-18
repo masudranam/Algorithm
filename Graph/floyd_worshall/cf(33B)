@@ -1,0 +1,86 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define print(a) for(auto x:a)cout<<x<<' ';cout<<'\n';
+#define debug(x) cout<<#x<<" "<<x<<endl
+#define all(a) (a).begin(),(a).end()
+#define sz(a) (int)(a.size())
+#define int   long long int
+#define endl '\n'
+#define ar array
+
+const int M = 1e9 + 7;
+const int N = 2e6+10;
+
+int d[50][50];
+
+void solve(){
+	string s,t;
+	cin >> s >> t;
+	if(sz(s) != sz(t)){
+		cout<<-1<<endl;return;
+	}
+
+	for(int i=0; i<50; i++){
+		for(int j=0; j<50; j++){
+			d[i][j]=M;
+		}
+	}
+
+	int n; 
+	cin >> n;
+	for(int i=0; i<n; i++){
+		char a,b;
+		cin >> a >> b;
+		int x; cin>>x;
+		d[a-'a'][b-'a']=min(d[a-'a'][b-'a'],x);
+	}
+
+	for(int k=0; k<26; k++){
+		for(int i=0; i<26; i++){
+			for(int j=0; j<26; j++){
+				d[i][j]=min(d[i][j],d[i][k]+d[k][j]);
+			}
+		}
+	}
+
+	string ans=s;
+	int cost=0;
+	for(int i=0; i<sz(s); i++){
+		if(s[i]==t[i])continue;
+		int a=s[i]-'a',b=t[i]-'a';
+		int tmp=d[b][a];
+		char c=s[i];
+		if(d[a][b]<tmp){
+			c=t[i];tmp=d[a][b];
+		}
+		for(int j=0;j<26;j++){
+			if(d[a][j]+d[b][j]<tmp){
+				tmp=d[a][j]+d[b][j];
+				c=j+'a';
+			}
+		}
+		if(tmp>=M){
+			cout<<-1<<endl;return;
+		}
+		cost+=tmp;
+		ans[i]=c;
+	}
+	cout<<cost<<'\n'<<ans<<endl;
+
+	
+}
+
+signed main() {
+   ios_base::sync_with_stdio (0);
+   cin.tie (0);
+
+   int t = 1;  //cin>>t;
+
+   for(int tc=1;tc<=t;tc++){
+   	//cout<<"Case "<<tc<<": \n";
+   	solve();
+   }
+   
+   return 0;
+}
