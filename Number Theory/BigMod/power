@@ -41,6 +41,20 @@ for(int i=sz(a)-1;i>=0;i--){
 return ans;
 }
 
+//power series summation in log(n)
+
+int s (int r, int n, int m) {
+   if (n == 0) return 1;
+   if (n == 1) return (1 + r) % m;
+   int ans;
+   if (n % 2 == 1) {
+      ans = (1 + r) % m * s ( (r % m * r % m) % m, (n - 1) / 2, m);
+   } else {
+      ans = 1 + (r * (1 + r) % m * s ( (r * r) % m, (n / 2) - 1, m));
+   }
+   return (ans % m);
+}
+
 
 int main(){
 
