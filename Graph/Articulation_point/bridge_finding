@@ -1,0 +1,48 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define print(a) for(auto x:a)cout<<x<<' ';cout<<'\n';
+#define debug(x) cout<<#x<<" "<<x<<endl
+#define all(a) (a).begin(),(a).end()
+#define sz(a) (int)(a.size())
+#define int   long long int
+#define endl '\n'
+#define ar array
+
+const int M = 1e9 + 7;
+const int N = 2e5 + 100;
+
+vector<int>g[N];
+int low[N], in[N], vis[N],t;
+
+bool bridge (int u, int p = -1) {
+   vis[u] = 1;
+   in[u] = low[u] = t++;
+   for (auto v : g[u]) {
+      if (v == p) continue;
+      if (vis[v]) {
+         low[u] = min (low[u], in[v]);
+      } else {
+         if (bridge (v, u)) return true;
+         if (low[v] > in[u]) return true;
+         low[u] = min (low[v], low[u]);
+      }
+   }
+   return false;
+}
+
+void solve() {
+
+}
+
+signed main() {
+   ios_base::sync_with_stdio (0);
+   cin.tie (0);
+
+   int t = 1;  //cin >> t;
+   for (int tc = 1; tc <= t; tc++) {
+      //cout << "Case " << tc << ": ";
+      solve();
+   }
+   return 0;
+}
