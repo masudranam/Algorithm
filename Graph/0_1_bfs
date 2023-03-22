@@ -1,0 +1,51 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define print(a) for(auto x:a)cout<<x<<' ';cout<<'\n';
+#define debug(x) cout<<#x<<" "<<x<<endl
+#define all(a) (a).begin(),(a).end()
+#define sz(a) (int)(a.size())
+#define int   long long int
+#define endl '\n'
+#define ar array
+
+const int M = 1e9 + 7;
+const int N = 2e5 + 100;
+
+vector<ar<int, 2>>g[N];
+int indeg[N], d[N];
+
+void bfs_0_1 (int s, vector<array<int, 2>> adj[]) {
+   memset (d, 0x3f, sizeof (d));
+   d[s] = 0;
+   deque<int> q;
+   q.push_front (s);
+   while (q.size()) {
+      int u = q.front(); q.pop_front();
+      for (array<int, 2> v : g[u]) {
+         if (d[u] + v[1] < d[v[0]]) {
+            d[v[0]] = d[u] + v[1];
+            if (v[1] == 1)
+               q.push_back (v[0]);
+            else q.push_front (v[0]);
+         }
+      }
+   }
+}
+
+void solve() {
+
+}
+
+
+signed main() {
+   ios_base::sync_with_stdio (0);
+   cin.tie (0);
+
+   int t = 1;  //cin >> t;
+   for (int tc = 1; tc <= t; tc++) {
+      //cout << "Case " << tc << ": ";
+      solve();
+   }
+   return 0;
+}
