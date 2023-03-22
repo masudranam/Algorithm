@@ -31,6 +31,27 @@ void bfs_0_1 (int s, vector<array<int, 2>> adj[]) {
          }
       }
    }
+
+
+   memset (d, 0x3f, sizeof (d));
+   d[s] = 0;
+   q.clear();
+   q.push_front (s);
+   while (!q.empty()) {
+      int v = q.front();
+      q.pop_front();
+      for (auto edge : g[v]) {
+         int u = edge[0];
+         int w = edge[1];
+         if (d[v] + w < d[u]) {
+            d[u] = d[v] + w;
+            if (w == 1)
+               q.push_back (u);
+            else
+               q.push_front (u);
+         }
+      }
+   }
 }
 
 void solve() {
