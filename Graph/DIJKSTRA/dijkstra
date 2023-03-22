@@ -1,0 +1,67 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define print(a) for(auto x:a)cout<<x<<' ';cout<<'\n';
+#define debug(x) cout<<#x<<" "<<x<<endl
+#define all(a) (a).begin(),(a).end()
+#define sz(a) (int)(a.size())
+#define int   long long int
+#define endl '\n'
+#define ar array
+
+const int M = 1e9 + 7;
+const int N = 2e5 + 100;
+
+vector<ar<int, 2>>g[N];
+int indeg[N], d[N];
+
+void dijkstraPQ (int src) {
+   memset (d, 0x3fff, sizeof (d));
+   priority_queue<ar<int, 2>, vector<ar<int, 2>>, greater<ar<int, 2>>>q;
+
+   d[src] = 0;
+   q.push ({0, src});
+   while (q.size()) {
+      ar<int, 2> u = q.top();
+      q.pop();
+      if (u[0] > d[u[1]]) continue;
+      for (ar<int, 2>v : g[u[1]]) {
+         if (d[v[1]] > u[0] + v[0]) {
+            d[v[1]] = u[0] + v[0];
+            q.push ({d[v[1]], v[1]});
+         }
+      }
+   }
+}
+
+void dijkstraSET (int src) {
+   memset (d, 0x3f, sizeof (d));
+   set<array<int, 2>>s;
+   s.insert ({d[src] = 0, src});
+   while (s.size()) {
+      int u = (*s.begin()) [1];
+      s.erase (s.begin());
+      for (auto v : g[u]) {
+         if (d[v[0]] > d[u] + v[0]) {
+            s.erase ({d[v[0]], v[0]});
+            d[v[0]] = d[u] + v[0];
+            s.insert ({d[v[0]], v[0]});
+         }
+      }
+   }
+}
+void solve() {
+
+}
+
+signed main() {
+   ios_base::sync_with_stdio (0);
+   cin.tie (0);
+
+   int t = 1;  //cin >> t;
+   for (int tc = 1; tc <= t; tc++) {
+      //cout << "Case " << tc << ": ";
+      solve();
+   }
+   return 0;
+}
