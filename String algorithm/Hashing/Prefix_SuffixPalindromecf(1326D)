@@ -1,0 +1,112 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define print(a) for(auto x:a)cout<<x<<" "
+#define debug(x) cout<<#x<<" "<<x<<endl
+#define all(a) (a).begin(),(a).end()
+#define sz(a) (int)(a.size())
+#define int   long long int
+#define endl '\n'
+#define ar array
+
+const int M = 1e9 + 7;
+const int N = 1e6 + 10;
+
+int pw[N], pw1[N], h11[N], h12[N], h21[N], h22[N];
+int p = 397, p1 = 101;
+
+bool pallindrome (int l, int r) {
+   int H11 = (h11[r] - h11[l - 1] + M) % M;
+   int H12 = (h12[r] - pw[r - l + 1] * h12[l - 1]) % M;
+   H12 = (pw[l - 1] * (H12 + M)) % M;
+   //debug(H1);debug(H2);
+   int H21 = (h21[r] - h21[l - 1] + M) % M;
+   int H22 = (h22[r] - pw1[r - l + 1] * h22[l - 1]) % M;
+   H22 = (pw1[l - 1] * (H22 + M)) % M;
+   return H11 == H12 && H21 == H22;
+}
+
+
+string s;
+
+string f() {
+   for (int i = sz (s); i > 0; i--)
+      if (pallindrome (1, i)) return s.substr (0, i);
+}
+
+string f1() {
+   for (int i = 1; i <= sz (s); i++)
+      if (pallindrome (i, sz (s))) return s.substr (i - 1);
+}
+
+void calc() {
+   for (int i = 0; i < sz (s); i++) {
+      h11[i + 1] = (h11[i] + pw[i] * (s[i])) % M;
+      h12[i + 1] = (h12[i] * p + (s[i])) % M;
+
+   }
+   for (int i = 0; i < sz (s); i++) {
+      h21[i + 1] = (h21[i] + pw1[i] * s[i]) % M;
+      h22[i + 1] = (h22[i] * p1 + s[i]) % M;
+   }
+
+}
+
+
+void solve() {
+   pw[0] = 1;
+   for (int i = 1; i < N; i++) {
+      pw[i] = (pw[i - 1] * p) % M;
+   }
+   pw1[0] = 1;
+   for (int i = 1; i < N; i++) {
+      pw1[i] = (pw1[i - 1] * p1) % M;
+   }
+
+   int n;
+   cin >> n;
+   while (n--) {
+
+      cin >> s;
+      set<char> sst;
+      for (auto c : s) sst.insert (c);
+      if (sz (sst) == 1) {
+         cout << s << endl; continue;
+      }
+
+      calc();
+      string ans = f();
+      string ans1 = f1();
+      if (sz (ans) < sz (ans1)) swap (ans, ans1);
+
+      string l, r;
+      int i = 0, j = sz (s) - 1;
+      while (j - i > 1 && s[i] == s[j]) {
+         l += s[i];
+         i++, j--;
+      }
+      r=l;reverse(all(r));
+      
+      s = s.substr (i, j - i + 1);
+      calc();
+      ans1 = f();
+      string ans2 = f1();
+      
+      if (sz (ans1) < sz (ans2)) swap (ans1, ans2);
+      ans1 = l + ans1 + r;
+      if (sz (ans) < sz (ans1)) swap (ans, ans1);
+      cout << ans << endl;
+
+   }
+
+}
+
+signed main() {
+   ios_base::sync_with_stdio (false); cin.tie (NULL);
+//freopen("input.txt","r",stdin);
+//freopen("output.txt","w",stdout);
+
+   int t = 1; //cin>>t;
+
+   while (t--) solve();
+   return 0;
+}
