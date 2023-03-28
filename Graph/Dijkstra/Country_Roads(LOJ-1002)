@@ -1,0 +1,64 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define print(a) for(auto x:a)cout<<x<<' ';cout<<'\n';
+#define debug(x) cout<<#x<<" "<<x<<endl
+#define all(a) (a).begin(),(a).end()
+#define sz(a) (int)(a.size())
+#define int   long long int
+#define endl '\n'
+#define ar array
+
+const int M = 1e9 + 7;
+const int N = 500 + 100;
+
+int n,m;
+vector<ar<int, 2>>g[N];
+int d[N];
+
+void dijkstr (int src) {
+   priority_queue<ar<int, 2>, vector<ar<int, 2>>, greater<ar<int, 2>>>pq;
+   pq.push({0, src});
+   d[src]=0;
+   while (sz (pq)) {
+      ar<int, 2> u = pq.top();
+      pq.pop();
+      for (auto v : g[u[1]]) {
+         if (d[v[0]] > max (d[u[1]], v[1])) {
+            d[v[0]] = max (d[u[1]], v[1]);
+            pq.push ({d[v[0]], v[0]});
+         }
+      }
+   }
+
+}
+
+void solve() {
+	 cin>>n>>m;
+	 for(int i=0; i<=n; i++)g[i].clear(),d[i]=M;
+	 for(int i=0; i<m; i++){
+		int u, v,w;
+		cin>>u>>v>>w;
+		g[u].push_back({v,w});
+		g[v].push_back({u,w});
+	 }
+	 int src; cin>>src;
+	 dijkstr(src);
+	 for(int i=0; i< n;i++){
+		if(d[i]>=M)cout<<"Impossible\n";
+		else cout<<d[i]<<endl;
+	 }
+}
+
+signed main() {
+   ios_base::sync_with_stdio (0);
+   cin.tie (0);
+
+   int t = 1;  cin >> t;
+   for (int tc = 1; tc <= t; tc++) {
+       cout << "Case " << tc << ": \n";
+      solve();
+   }
+   return 0;
+}
+
