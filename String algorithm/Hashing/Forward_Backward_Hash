@@ -42,24 +42,54 @@ bool ispalin(int l,int r){
     return (hashF(l, r) == hashR(l, r));
 }
 
-string f(){
-for(int i=sz(s);i>0;i--)
-if(ispalin(1,i))return s.substr(0,i);
-}
- 
-string f1(){
-   for(int i=1;i<=sz(s);i++)
-   if(ispalin(i,sz(s)))return s.substr(i-1);
-}
- 
 
- 
- 
-void solve(){
+//Double hashing
 
+const int M = 1e9 + 7;
+const int M1=M+2;
+const int N = 1e6 + 10;
 
- 
+string s, t;
+int k;
+const int p1 = 397, p2 = 313;
+int pw1[N], pw2[N], hF1[N], hF2[N], hR1[N], hR2[N], len, n;
+
+void Calc() {
+   len = sz (s);
+   pw1[0] = 1; hF1[0] = hR1[len + 1] = 0;
+   pw2[0] = 1; hF2[0] = hR2[len + 1] = 0;
+
+   for (int i = 1; i <= len; i++) {
+      pw1[i] = (pw1[i - 1] * p1) % M;
+      pw2[i] = (pw2[i - 1] * p1) % M1;
+   }
+   for (int i = 0; i < len; i++) {
+      hF1[i + 1] = (hF1[i] * p1 + (s[i])) % M;
+      hF2[i + 1] = (hF2[i] * p1 + s[i]) % M1;
+      hR1[len - i] = (hR1[len - i + 1] * p1 + (s[len - i - 1])) % M;
+      hR2[len - i] = (hR2[len - i + 1] * p1 + (s[len - i - 1])) % M1;
+   }
 }
+
+
+ar<int, 2> hashF (int l, int r) {
+   int val1 = hF1[r] - (hF1[l - 1] * pw1[r - l + 1]) % M;
+   int val2 = hF2[r] - (hF2[l - 1] * pw2[r - l + 1]) % M1;
+   if (val1 < 0) val1 += M;
+   if (val2 < 0) val2 += M1;
+   return {val1, val2};
+}
+
+ar<int, 2> hashR (int l, int r) {
+   int val1 = hR1[l] - (hR1[r + 1] * pw1[r - l + 1]) % M;
+   int val2 = hR2[l] - (hR2[r + 1] * pw2[r - l + 1]) % M1;
+   if (val1 < 0) val1 += M;
+   if (val2 < 0) val2 += M1;
+   return {val1, val2};
+}
+
+
+
 signed main(){
 ios_base::sync_with_stdio(false);cin.tie(NULL);
 //freopen("input.txt","r",stdin);
