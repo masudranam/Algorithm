@@ -18,7 +18,7 @@ int pw[N],hF[N],hR[N],len,n;
 void Calc(){
     len=sz(s);
     pw[0]=1; hF[0] = hR[len+1] = 0;
-    for(int i=1;i<=len;i++){pw[i]=pw[i-1]*p)%M;}
+    for(int i=1;i<=len;i++){pw[i]=(pw[i-1]*p)%M;}
     for(int i=0; i<len; i++){
         hF[i+1] = (hF[i] * p + (s[i] - 'a' + 1) ) % M;
         hR[len-i] = (hR[len-i+1] * p + (s[len-i-1] - 'a' + 1)) % M;
