@@ -1,0 +1,113 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define print(a) for(auto x:a)cout<<x<<' ';cout<<'\n';
+#define debug(x) cout<<#x<<" "<<x<<endl
+#define all(a) (a).begin(),(a).end()
+#define sz(a) (int)(a.size())
+//#define int   long long int
+#define endl '\n'
+#define ar array
+
+const int M = 1e9 + 7;
+const int N = 1e6+100;
+
+struct Node{
+    int nxt[26],l,r;
+    Node(){
+    fill(nxt,nxt+26,0);
+    }
+};
+
+struct Trie{
+    vector<Node>T;
+    Trie(){
+        T.push_back(Node());
+        T.reserve(2100*2100); //without this verdict will give memory limite exec.
+    }
+
+    void add(string s, int l,int dr){
+        int v=0,r=l;
+        for(auto c: s){
+           int  cc=c-'a';
+            if(!T[v].nxt[cc]){
+                T[v].nxt[cc]=T.size();
+                T.push_back(Node());
+                T.back().l=l;
+                T.back().r=r;
+            }
+            v=T[v].nxt[cc];
+            r+=dr;
+        }
+    }
+
+    void built(string s){
+        int n=sz(s);
+        for(int i=0; i<n ;i++){
+            string cur=s.substr(i,n-i);
+            add(cur,i,1);
+            cur=s.substr(0,n-i);
+            reverse(all(cur));
+            add(cur,n-i-1,-1);
+        }
+    }
+
+    void go(string s){
+        int v=0;
+        for(int i=0; i<sz(s); i++){
+            int cc=s[i]-'a';
+            if(!T[v].nxt[cc])break;
+            cout<<s[i]<<' ';
+            v=T[v].nxt[cc];
+        }
+    }
+    
+    vector<ar<int,2>>get(string t){
+        int n=sz(t),v=0;
+        vector<ar<int,2>>ans;
+        t.push_back('z'+1);
+        for(int i=0; i<=n; i++){
+            int cc=t[i]-'a';
+            if(i==n || !T[v].nxt[cc]){
+              // debug(i); debug(T[v].nxt[cc]);
+                if(v==0)return vector<ar<int,2>>();
+                ans.push_back({T[v].l,T[v].r});
+                v=0;
+            }
+            if(i<n)v=T[v].nxt[cc];
+        }
+        return ans;
+    }
+};
+
+
+
+void solve(){
+ 
+string s,t; cin>>s>>t;
+int n=sz(s);
+
+Trie T;
+T.built(s);
+vector<ar<int,2>>ans=T.get(t);
+
+if(sz(ans)==0)cout<<-1<<endl;
+else{
+    cout<<sz(ans)<<endl;
+    for(auto it: ans)cout<<it[0]+1<<' '<<it[1]+1<<endl;
+}
+
+}
+
+
+signed main() {
+   ios_base::sync_with_stdio (0);
+   cin.tie (0);
+
+   int t = 1;  //cin >> t;
+   for (int tc = 1; tc <= t; tc++) {
+     // cout << "Collection #" << tc << ":\n";
+      solve();
+   }
+   return 0;
+}
