@@ -1,0 +1,119 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define print(a) for(auto x:a)cout<<x<<' ';cout<<'\n';
+#define debug(x) cout<<#x<<" "<<x<<endl
+#define all(a) (a).begin(),(a).end()
+#define sz(a) (int)(a.size())
+#define int   long long int
+#define endl '\n'
+#define ar array
+
+const int M = 1e9 + 7;
+const int N = 1e6 + 100;
+
+string s;
+int n,node,par[N],d[N],pl[N],sl[N],trie[N][26];
+int nxt[N][26],ans[N],vis[N],a[N],lev[N],mn[N];
+vector<int>tr[N];
+
+void ins(string &s, int idx){
+    int cur=0;
+    for(auto it: s){
+        int c=it-'a';
+        if(!trie[cur][c]){
+            trie[cur][c]=++node;
+            d[node]=d[cur]+1;
+            par[node]=cur;
+            pl[node]=c;
+        }
+        cur=trie[cur][c];
+    }
+    lev[idx]=cur;
+    mn[cur]=min(mn[cur],idx);
+}
+
+void push_link(){
+    queue<int>q;
+    q.push(0);
+    while(sz(q)){
+        int v=q.front();
+        q.pop();
+        if(d[v]<=1)sl[v]=0;
+        else{
+            int u=sl[par[v]];
+            int l=pl[v];
+            while(u>0 && !trie[u][l])u=sl[u];
+            if(trie[u][l])u=trie[u][l];
+            sl[v]=u;
+        }
+        if(v!=0)tr[v].push_back(sl[v]);
+        for(int i=0; i<26; i++)if(trie[v][i])q.push(trie[v][i]);
+    }
+}
+
+int jump(int cur, int id){
+    if(nxt[cur][id])return nxt[cur][id];
+    int u=cur;
+    while(cur>0 && !trie[cur][id])cur=sl[cur];
+    if(trie[cur][id])cur=trie[cur][id];
+    return nxt[u][id]=cur;
+}
+
+void dfs(int u){
+    if(vis[u])return;
+    vis[u]=1;
+    for(auto v: tr[u]){
+        dfs(v);
+        mn[u]=min(mn[u],mn[v]);
+    }
+}
+
+void solve(){
+    cin>>n;
+    for(int i=0; i<N; i++)mn[i]=M;
+    vector<pair<string,int>> qry;
+    for(int i=0; i<n; i++){
+        int type;
+        string st;
+        cin>>type>>st;
+        if(!type)ins(st,i);
+        else qry.push_back({st,i});
+    }
+    push_link();
+    for(int i=node; i>=0; i--){
+        if(!vis[i])dfs(i);
+    }
+    for(auto it: qry){
+            string fs=it.first;
+         int cur=0,f=0;
+         for(int i=0; i<sz(fs); i++){
+            int id=fs[i]-'a';
+            int x=jump(cur,id);
+            cur=x;
+            if(mn[cur]<=it.second){
+                f=1;break;
+            }
+         }
+         if(f)cout<<"YES\n";
+         else cout<<"NO\n";
+    }
+
+}
+
+
+signed main() {
+    ios_base::sync_with_stdio (0);
+    cin.tie (0);
+
+    int t = 1;    //cin >> t;
+    for (int tc = 1; tc <= t; tc++) {
+        //cout << "Case " << tc << ": ";
+        solve();
+    }
+    return 0;
+}
+
+
+
+
