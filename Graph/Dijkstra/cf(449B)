@@ -1,0 +1,64 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define print(a) for(auto x:a)cout<<x<<' ';cout<<'\n';
+#define debug(x) cout<<#x<<" "<<x<<endl
+#define all(a) (a).begin(),(a).end()
+#define sz(a) (int)(a.size())
+#define int   long long int
+#define endl '\n'
+#define ar array
+
+const int M = 1e9 + 7;
+const int N = 2e6 + 10;
+
+vector<ar<int,2>>g[N];
+int vis[N],k,n,cnt,m;
+
+void djk(int src){
+   priority_queue<ar<int,3>>q;
+   q.push({0,0,0});
+   while(sz(q)){
+      auto u=q.top();
+      q.pop();
+      if(vis[u[2]])continue;
+      if(u[1])cnt++;
+      vis[u[2]]=1;
+      for(auto v: g[u[2]]){
+         if(v[1]<0)q.push({u[0]+v[1],-1,v[0]});
+         else q.push({u[0]-v[1],0,v[0]});
+      }
+   }
+}
+
+void solve(){
+      cin >> n >> m >> k;
+      for(int i = 0; i < m; i++){
+         int u, v, w; cin >> u >> v >> w;
+         u--, v--;
+         g[u].push_back({v,w});
+         g[v].push_back({u,w});
+      } 
+      for(int i = 0; i < k; i++){
+         int v, w; cin >> v >> w;
+         v--;
+         g[0].push_back({v,-w});
+      }
+      djk(0);
+      cout<< k - cnt << endl;
+
+}
+
+
+signed main() {
+   ios_base::sync_with_stdio (0);
+   cin.tie (0);
+
+   int t = 1;  //cin >> t;
+   for (int tc = 1; tc <= t; tc++) {
+      //cout << "Case " << tc << ": \n";
+      solve();
+     // if (tc < t) cout << '\n';
+   }
+   return 0;
+}
