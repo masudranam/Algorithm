@@ -105,3 +105,124 @@ for(int i=0;i<m;i++)cout<<qr[i];cout<<endl;
 
 return 0;
 }
+
+
+
+
+
+//Robertson multiplication
+#include<iostream>
+using namespace std;
+
+
+void add(int *a,int b[],int n){
+int carry=0;
+for(int i=n-1;i>=0;i--){
+    a[i]=(a[i]+b[i]+carry);
+    if(a[i]>1){
+        a[i]%=2;
+        carry=1;
+    }else{
+    carry=0;
+    }
+}
+}
+
+void complement(int *a,int n){
+int x[n+1]={0};
+x[n-1]=1;
+for(int i=n-1;i>=0;i--){
+    a[i]=(a[i]+1)%2;
+}
+add(a,x,n);
+}
+
+void rightShift(int *a,int *b,int n,int m,int flag){
+    for(int i=m-1;i>0;i--){
+    b[i]=b[i-1];
+    }
+    b[0]=a[n-1];
+    for(int i=n-1;i>0;i--)a[i]=a[i-1];
+    a[0]=flag;
+}
+
+void show(int *a,int *b,int n,int m){
+for(int i=0;i<n;i++)cout<<a[i];
+cout<<"\t\t";
+for(int i=0;i<m;i++)cout<<b[i];
+
+}
+
+// 1 1 0 1 0 1 0 1->0 0 1 0 1 0 1 1->32+0+8+0+2+1=-43
+// 1 0 1 1 0 0 1 1->0 1 0 0 1 1 0 1->64+0+0+8+4+0+1=-77
+//-43*(-77)=3311
+// 000110011101111->3311
+
+
+int main(){
+int acumulator[32]={0},multiplicant[32]={0},multiplier[32]={0},carry=0;
+
+int n;
+cout<<"Enter the number of multiplicant bits: ";
+cin>>n;
+
+
+cout<<"Enter multiplicant: \n";
+for(int i=0;i<n;i++)cin>>multiplicant[i];
+cout<<"Ener number of multiplier bits:\n";
+int m;cin>>m;
+cout<<"Enter multiplier :\n";
+for(int i=0;i<m;i++)cin>>multiplier[i];
+int flag=0,neg=multiplicant[0];
+
+
+cout <<"step  action     \tAC\t\tQR\t\tqn\n";
+cout <<m<<"     initial\t\t";
+
+    for(int i=0;i<n;i++)cout<<'0';
+    cout<<"\t\t";
+    for(int i=0;i<m;i++)
+    cout<<multiplier[i];
+
+cout<<"\t\t"<<multiplier[m-1]<<endl;
+
+
+
+for(int i=m-1;i>=0;i--){
+    if(i==0 && multiplier[m-1]==1 && neg){
+
+     cout<<i<<"     subs and qn=0\t";
+     show(acumulator,multiplier,n,m);
+     cout<<"\t\t"<<multiplier[m-1]<<endl;
+
+
+        complement(multiplicant,n);
+        add(acumulator,multiplicant,n);
+        rightShift(acumulator,multiplier,n,m,flag);
+       // multiplier[m-1]=0;
+        break;
+    }
+    bool f=1;
+
+    if(multiplier[m-1]==1){
+        if(neg)flag=1;
+        cout<<i<<"     add and shift\t"; f=0;
+        add(acumulator,multiplicant,n);
+    }
+
+    rightShift(acumulator,multiplier,n,m,flag);
+
+
+    if(f)cout<<i<<"     only shifting\t";
+     show(acumulator,multiplier,n,m);
+     cout<<"\t\t"<<multiplier[m-1]<<endl;
+
+}
+cout<<"\nRes : ";
+for(int i=0;i<n;i++)cout<<acumulator[i];
+for(int i=0;i<m;i++)cout<<multiplier[i];
+cout<<endl;
+
+return 0;
+}
+
