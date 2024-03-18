@@ -1,0 +1,1 @@
+{"name":"Local: cp","url":"e:\\Codeforces\\cp.cpp","tests":[{"id":1690801182184,"input":"5\nabc\naab\nabc\ncba\nbcbca","output":""}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"e:\\Codeforces\\cp.cpp","group":"local","local":true}
