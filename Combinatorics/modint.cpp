@@ -1,5 +1,4 @@
 //Collected
-
 template <const int32_t MOD>
 struct modint {
   int32_t value;
