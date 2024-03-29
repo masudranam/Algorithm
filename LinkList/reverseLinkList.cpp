@@ -36,7 +36,7 @@ int main() {
     node *prevnode, *currentnode, *nextnode;
 
     prevnode = 0;
-    currentnode = nextnode = head;
+    currentnode = nextnode = head; // 1 2 3 4 5
     while(nextnode != 0) {
         nextnode = nextnode -> next;
         currentnode -> next = prevnode;
