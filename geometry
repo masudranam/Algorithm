@@ -56,7 +56,6 @@ double get_angle (Point a, Point b) {
    return acos (max ( (double) -1.0, min ( (double) 1.0, costheta)));
 }
 
-
 void solve() {
     Point p{1,2},p1{1,2.1};
     cout<<(p<p1)<<endl;
