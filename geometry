@@ -58,10 +58,7 @@ double get_angle (Point a, Point b) {
 
 
 void solve() {
-    Point p{1,2},p1{1,2.1};
-    cout<<(p<p1)<<endl;
-    
-    cout<<p.x<<" "<<p.y<<endl;
+  cout << "HELLO world\n";
 }
 
 
