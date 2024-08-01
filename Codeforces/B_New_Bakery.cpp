@@ -6,35 +6,32 @@ using namespace std;
 #define int   long long int
 
 const int M = 1e9 + 7;
-const int N = 1e6 + 10;
+const int N = 2e5 + 10;
 
-struct node{
-    int a, b, d;
-    bool operator < (node other){
-        return d > other.d;
-    }
-}v[N];
-int n; 
-
-
-
-void solve(){
-    cin >> n;
-
-    for(int i = 0; i < n; i++){
-        cin >> v[i].a >> ;
-        v[i].d = v[i].b - v[i].a;
-    }
-
+int get(int l, int r, int x){
+    return ((l + r)*x) / 2;
 }
 
-//abacba
+void solve(){
+    int n, a, b;
+    cin >> n >> a >> b;
+
+    if(a >= b){
+        cout << n * a << '\n';
+        return;
+    }
+
+    int baki = min(n,b - a);
+    int ans = (n - baki) * a;
+    ans += get(b, b - baki + 1, baki);
+    cout << ans << '\n';
+}
 
 signed main() {
    ios_base::sync_with_stdio (0);
    cin.tie (0);
 
-   int t = 1;  // cin >> t;
+   int t = 1;   cin >> t;
    for (int tc = 1; tc <= t; tc++) {
       //cout<<"Case "<<tc<<": ";
       solve();

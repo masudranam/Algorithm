@@ -6,35 +6,27 @@ using namespace std;
 #define int   long long int
 
 const int M = 1e9 + 7;
-const int N = 1e6 + 10;
-
-struct node{
-    int a, b, d;
-    bool operator < (node other){
-        return d > other.d;
-    }
-}v[N];
-int n; 
-
-
+const int N = 2e5 + 10;
 
 void solve(){
+    int n;
     cin >> n;
-
-    for(int i = 0; i < n; i++){
-        cin >> v[i].a >> ;
-        v[i].d = v[i].b - v[i].a;
+    vector<int> a(n);
+    for(auto &x: a) cin >> x;
+    int res = 0, mx = 0;
+    for(int i = 0; i + 1 < n; i++){
+        res = max(res, a[i] + a.back());
+        mx = max(mx, a[i]);
     }
+    cout << res << '\n';
 
 }
-
-//abacba
 
 signed main() {
    ios_base::sync_with_stdio (0);
    cin.tie (0);
 
-   int t = 1;  // cin >> t;
+   int t = 1;   cin >> t;
    for (int tc = 1; tc <= t; tc++) {
       //cout<<"Case "<<tc<<": ";
       solve();
