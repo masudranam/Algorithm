@@ -12,7 +12,6 @@ using namespace std;
 const int M = 1e9 + 7;
 const int N = 2e5 + 100;
 
-
 struct BIT { //1-indexed
   int n; vector<int> t;
   BIT() {}
@@ -36,6 +35,7 @@ struct BIT { //1-indexed
     return qry(r) - qry(l - 1);
   }
 };
+
 void solve() {
 
 }

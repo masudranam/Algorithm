@@ -2,61 +2,55 @@
 using namespace std;
 
 #define print(a) for(auto x:a)cout<<x<<' ';cout<<'\n';
-#define debug(x) cout<<#x<<" "<<x<<endl
-#define all(a) (a).begin(),(a).end()
-#define sz(a) (int)(a.size())
-//#define int   long long int
-#define endl '\n'
-#define ar array
+#define debug(x) cout<<#x<<" "<<x<<'\n'
+#define int   long long int
  
-const int M = 18;
-const int N = (1<<M) + 10;
+const int M = 1e9 + 7;
+const int N = 2e5 + 10;
 
-int cnt[M][M];
-int d[M],n,m;
-string s;
-int dp[N];
-
-int get(int mask){
-    int already = __builtin_popcount(mask);
-    if(already == m)return 0;
-    if(dp[mask] != -1) return dp[mask];
-
-    int ret = (1<<30);
-    for(int i = 0; i < m; i++){
-        if(mask & (1<<i))continue;
-        int cur =  0;
-        for(int j = 0; j < m; j++){
-            if(mask & (1<<j))cur += cnt[i][j];
-        }
-        ret = min(ret,get(mask|(1<<i)) + cur*already - (d[i]-cur)*already);
-    }
-    return dp[mask] = ret;
-}
+struct BIT { //1-indexed
+  int n; vector<int> t;
+  BIT() {}
+  BIT(int _n) {
+    n = _n; t.assign(n + 5, 0);
+  }
+  int qry(int i) {
+    int ans = 0;
+    for (; i >= 1; i -= (i & -i)) ans += t[i];
+    return ans;
+  }
+  void upd(int i, int val) {
+    if (i <= 0) return;
+    for (; i <= n; i += (i & -i)) t[i] += val;
+  }
+  void upd(int l, int r, int val) {
+    upd(l, val);
+    upd(r + 1, -val);
+  }
+  int qry(int l, int r) {
+    return qry(r) - qry(l - 1);
+  }
+};
 
 void solve(){
-    cin >> n >> m;
-    cin >> s;
-    for(int i = 1; i < n; i++){
-        if(s[i] == s[i-1])continue;
-        cnt[s[i]-'a'][s[i-1]-'a']++;
-        cnt[s[i-1]-'a'][s[i]-'a']++;
-        d[s[i]-'a']++, d[s[i-1]-'a']++;
+    BIT bit(N);
+    bit.upd(2, 10, 10);
+    bit.upd(5, 7, 5);
+    bit.upd(3, 8, 3);
+    for(int i = 2; i <= 10; i++){
+        cout << bit.qry(i) << ' ';
     }
-
-    memset(dp,-1,sizeof(dp));
-
-    cout<<get(0)<<endl;
 }
 
 signed main() {
    ios_base::sync_with_stdio (0);
    cin.tie (0);
 
-   int t = 1;  // cin >> t;
+   int t = 1; 
+  // cin >> t;
    for (int tc = 1; tc <= t; tc++) {
+      //cout<<"Case "<<tc<<": ";
       solve();
    }
    return 0;
 }
-
