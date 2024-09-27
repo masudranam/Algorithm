@@ -139,9 +139,7 @@ const int mod = 1000 * 1000 * 1000 + 7;
 typedef modint<mod> mint;
  
 void solve() {
-    mint n=2;
-   cout<<n.pow(9)<<endl;
-                
+                    
 }
 
 signed main() {

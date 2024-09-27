@@ -1,76 +1,93 @@
 struct node {
     int mn,s,mx,lz;
-} st[1<<19];
-int n,q;
+    node(){
+        mx = -M, mn = M, s = 0, lz = -1;
+    }
+};
 
 struct ST {
-    void upd(int l1,int x,int i=1,int l2=0,int r2=n-1) {
-        if(l2==r2) {
-            st[i].mx=x;
+    vector<node> t;  
+    int n;
+    ST(int _n){
+        n = _n; t.assign(4*n + 10, node());
+    }
+
+    node Merge(node a, node b){
+        node res;
+        res.s = a.s + b.s;
+        return res;
+    }
+
+    void upd(int L,int x,int i,int l,int r) {
+        if(l==r) {
+            t[i].s = x;
             return;
         }
-
-        int m2=(l2+r2)/2;
-        if(l1<=m2)
-            upd(l1,x,2*i,l2,m2);
-        else upd(l1,x,2*i+1,m2+1,r2);
-
-        st[i].mx=max(st[2*i].mx,st[2*i+1].mx);
+        int m = (l+r)/2;
+        if(L <= m) upd(L, x, 2*i, l, m);
+        else upd(L, x, 2*i+1, m+1, r);
+        t[i] = Merge(t[2*i], t[2*i+1]);
+    }
+    void upd(int l, int val){
+        upd(l,val,1,0,n-1);
     }
 
-    int qry(int l1,int r1,int i=1,int l2=0,int r2=n-1) {
-        if(l2>=l1&&r2<=r1) {
-            return st[i].mx;
-        }
-        if(l2 > r1 || r2 < l1)return 0; //This line is crazy
-        int m2=(l2+r2)/2;
-        return max((l1<=m2?qry(l1,r1,2*i,l2,m2):0),(m2<r1?qry(l1,r1,2*i+1,m2+1,r2):0));
+    node qry(int L,int R,int i,int l,int r) {
+        if(l >= L && r <= R) return t[i];
+        if(l > R || r < L)return node();
+        int m=(l+r)/2;
+
+        node left , right;
+        if(L <= m)left = qry(L, R, 2*i, l, m);
+        if(m < R)right = qry(L, R, 2*i+1, m+1, r);
+        return Merge(left, right);
+    }
+    node qry(int l, int r){
+        return qry(l,r,1,0,n-1);
     }
 
-    void app(int i,int x,int l2,int r2) {
-        st[i].mn+=x;
-        st[i].s+=x*(r2-l2+1);
-        st[i].lz+=x;
+     void prop(int i, int l, int r){
+        if(t[i].lz != -1){  
+            t[i].s = t[i].lz * (r - l + 1);
+            if(l != r){
+                t[2*i].lz = t[2*i + 1].lz = t[i].lz;
+            }
+            t[i].lz = -1;
+        }       
     }
 
-    void psh(int i,int l2,int m2,int r2) {
-        app(2*i,st[i].lz,l2,m2);
-        app(2*i+1,st[i].lz,m2+1,r2);
-        st[i].lz=0;
-    }
-
-    void upd1(int l1,int x,int i=1,int l2=0,int r2=n-1) {
-        if(l2==r2) {
-            st[i].mn=x;
-            st[i].s=x;
+    void upd1(int L, int R, int x, int i, int l, int r) {
+        prop(i,l,r);
+        if(L > r || R < l || l > r) return;
+        if(L <= l && r <= R) {
+            t[i].lz = x;
+            prop(i,l,r);
             return;
         }
-        int m2=(l2+r2)/2;
-        psh(i,l2,m2,r2);
-        if(l1<=m2)
-            upd1(l1,x,2*i,l2,m2);
-        else upd1(l1,x,2*i+1,m2+1,r2);
-        st[i].mn=min(st[2*i].mn,st[2*i+1].mn);
-        st[i].s=st[2*i].s+st[2*i+1].s;
+        int m=(l+r)/2;
+        upd1(L, R, x, 2*i, l, m);
+        upd1(L, R, x, 2*i+1, m+1, r);
+        t[i] = Merge(t[2*i] , t[2*i+1]);
     }
 
-    void upd2(int l1,int r1,int x,int i=1,int l2=0,int r2=n-1) {
-        if(l1<=l2&&r2<=r1) {
-            app(i,x,l2,r2);
-            return;
+    void upd1(int L, int R, int x){
+        return upd1(L,R,x,1,0,n-1);
+    }
+
+    node qry1(int L, int R, int i, int l, int r) {
+        prop(i,l,r);
+        if(L > r || R < l || l > r) return node();
+        if(L<=l && r<=R){
+            return t[i];
         }
-        int m2=(l2+r2)/2;
-        psh(i,l2,m2,r2);
-        if(l1<=m2)upd2(l1,r1,x,2*i,l2,m2);
-        if(m2<r1)upd2(l1,r1,x,2*i+1,m2+1,r2);
-        st[i].mn=min(st[2*i].mn,st[2*i+1].mn);
-        st[i].s=st[2*i].s+st[2*i+1].s;
+        int m = (l+r)/2;
+        node left , right;
+         left = qry1(L, R, 2*i, l, m);
+         right = qry1(L, R, 2*i+1, m+1, r);
+        return Merge(left, right);
     }
 
-    int qry1(int l1,int r1,int i=1,int l2=0,int r2=n-1) {
-        if(l1<=l2&&r2<=r1)return st[i].s;
-        int m2=(l2+r2)/2;
-        psh(i,l2,m2,r2);
-        return (l1<=m2?qry(l1,r1,2*i,l2,m2):0)+(m2<r1?qry(l1,r1,2*i+1,m2+1,r2):0);
-    }
+    node qry1(int L, int R){
+        return qry1(L,R,1,0,n-1);
+    }    
 };

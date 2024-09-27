@@ -8,8 +8,13 @@ using namespace std;
 const int M = 1e9 + 7;
 const int N = 2e5 + 10;
 
+<<<<<<< HEAD
 bool ok(int x, vector<pair<int,int>>a){
     int t = a.back().first * x;
+=======
+bool ok(int x, vector<pair<int,int>>&a){
+    int t = x;
+>>>>>>> c4b296f099f991f3e9d36d132405de9dfa1105d9
     int cur = 0;
     int n = a.size();
 
@@ -22,10 +27,15 @@ bool ok(int x, vector<pair<int,int>>a){
 void solve(){
     int n; cin >> n;
     vector<pair<int,int>> a;
+<<<<<<< HEAD
+=======
+
+>>>>>>> c4b296f099f991f3e9d36d132405de9dfa1105d9
     for(int i = 0; i < n; i++){
         int x; cin >> x;
         a.push_back({x,i});
     }
+<<<<<<< HEAD
 
     sort(a.begin(),a.end());
 
@@ -34,13 +44,23 @@ void solve(){
             vector<int> ans(n);
 
             int t = a.back().first*i;
+=======
+            if(ok(M/10,a)){
+            vector<int> ans(n);
+
+            int t = M/10;
+>>>>>>> c4b296f099f991f3e9d36d132405de9dfa1105d9
             for(int j = 0; j < n; j++){
                 ans[a[j].second] = (t + a[j].first - 1)/a[j].first;
             }
             print(ans);
             return;
         }
+<<<<<<< HEAD
     }
+=======
+    
+>>>>>>> c4b296f099f991f3e9d36d132405de9dfa1105d9
     cout << - 1 << '\n';
     
 }
@@ -55,4 +75,8 @@ signed main() {
       solve();
    }
    return 0;
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> c4b296f099f991f3e9d36d132405de9dfa1105d9
