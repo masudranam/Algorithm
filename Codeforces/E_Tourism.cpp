@@ -40,11 +40,6 @@ int dfs(int u, int par)
 }
  
 
-
-
-
-
-
 int n, m;
 set<int> st[N];
 vector<int> g[N];

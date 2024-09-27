@@ -16,15 +16,14 @@ int countSubsequences(const std::string& S, int K) {
     
     // Base case: There's exactly one way to form the empty subsequence
     for (int j = 0; j <= N; ++j) {
-        //dp[0][j] = 1;
+        dp[0][j] = 1;
     }
     dp[0][0] = 1;
 
-    // Fill DP table
+
     for (int i = 1; i <= L; ++i) {
         std::vector<int> cumulativeSum(N + 1, 0);
         
-        // Compute cumulative sums for the previous row
         cumulativeSum[0] = dp[i - 1][0];
         for (int j = 1; j <= N; ++j) {
             cumulativeSum[j] = (cumulativeSum[j - 1] + dp[i - 1][j]) % MOD;
@@ -38,7 +37,7 @@ int countSubsequences(const std::string& S, int K) {
         }
     }
 
-    // The answer is the sum of dp[L][j] for all j
+   
     int result = 0;
     for (int j = 1; j <= N; ++j) {
         result = (result + dp[L][j]) % MOD;
