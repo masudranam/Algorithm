@@ -15,7 +15,8 @@ int countSubsequences(const std::string& S, int K) {
     std::vector<std::vector<int>> dp(L + 1, std::vector<int>(N + 1, 0));
     
     // Base case: There's exactly one way to form the empty subsequence
-    for (int j = 0; j <= N; ++j) {
+    for (int j = 0; j < N; ++j) {
+        if(s[j] == P[0])
         dp[0][j] = 1;
     }
     dp[0][0] = 1;
